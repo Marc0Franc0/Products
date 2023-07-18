@@ -9,18 +9,19 @@ import javax.persistence.Id;
 import lombok.*;
 
 @Entity
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class Product implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
+     @Basic
+    private String name;
+
     @Basic
-    String name;
-    String companyBrand;
-    int amount;
+    private String companyBrand;
+
+    @Basic
+    private int amount;
 
     public int getId() {
         return id;
@@ -31,7 +32,7 @@ public class Product implements Serializable {
         return "Product{" + "id=" + id + ", name=" + name +
                 ", companyBrand=" + companyBrand + ", amount=" + amount + '}';
     }
-
+    
     //Se utiliza para poder mapear la lista deproductosy asi mostrarlos en la tabla
   public Object[] toArray(){
       
@@ -43,7 +44,18 @@ public class Product implements Serializable {
        obj[3]=this.companyBrand;
        return obj;
   }
-   
+
+    public Product() {
+    }
+
+    public Product(int id, String name, String companyBrand, int amount) {
+        this.id = id;
+        this.name = name;
+        this.companyBrand = companyBrand;
+        this.amount = amount;
+    }
+
+  
     public String getName() {
         return name;
     }

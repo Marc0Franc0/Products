@@ -20,13 +20,18 @@ import javax.persistence.criteria.Root;
  *
  * @author marco
  */
+//Esta clase se usa a la hora de utilizar el controlador jpa de la clase Product
 public class ProductJpaController implements Serializable {
 
     public ProductJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-      public ProductJpaController() {
-        this.emf = Persistence.createEntityManagerFactory("ProductsPU");
+
+    public ProductJpaController() {
+         
+        this.emf = Persistence.createEntityManagerFactory("databasePU");
+       
+    
     }
     private EntityManagerFactory emf = null;
 
