@@ -1,5 +1,5 @@
 # [Products](https://github.com/Marc0Franc0/Products#Products)
-Proyecto para administrar productos, pudiendo agregar nuevos, modificarlos o eliminarlos.
+Este sistema permite a los usuarios agregar, visualizar, modificar y eliminar productos en una base de datos. Con una interfaz intuitiva, los usuarios podrán controlar el inventario de productos y acceder fácilmente a la información relevante
 
 ## Características
 - CRUD para la entidad "Product"
