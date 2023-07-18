@@ -21,7 +21,6 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Products extends javax.swing.JFrame {
 
-    DefaultTableModel defaultTableModel = new DefaultTableModel();
     ProductService productService = new ProductServiceImpl();
     JOptionPane jOptionPane = new JOptionPane();
     List<Product> products = new ArrayList<>();
@@ -196,28 +195,38 @@ public class Products extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSaveMouseClicked
+        String name = nameInput.getText();
+        String amount = amountInput.getText();
+        String brand = brandInput.getText();
+        //Validación de datos
+        if (validateInputs(name, amount, brand)) {
+            //Creacion del producto
+            try {
+                //Creación de objeto con los datos del producto ingresados 
+                // y llamado al metodo del servicio para agregar el producto
+                productService.addProduct(
+                        ProductDTO.builder()
+                                .name(name)
+                                .amount(Integer.parseInt(amount))
+                                .companyBrand(brand)
+                                .build());
+                //Mensaje de creacion de creacion correcta
+                jOptionPane.showMessageDialog(
+                        null, "Producto creado",
+                        "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+                //Actualizacion de datos
+                updateProductsTable();
 
-        try {
-            //Creación de objeto con los datos del producto ingresados 
-            // y llamado al metodo del servicio para agregar el producto
-            productService.addProduct(
-                    ProductDTO.builder()
-                            .name(nameInput.getText())
-                            .amount(Integer.parseInt(amountInput.getText()))
-                            .companyBrand(brandInput.getText())
-                            .build());
-            //Mensaje de creacion de creacion correcta
-            jOptionPane.showMessageDialog(
-                    null, "Producto creado",
-                    "Mensaje", JOptionPane.INFORMATION_MESSAGE);
-            //Actualizacion de datos
-            updateProductsTable();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+                jOptionPane.showMessageDialog(
+                        null, "Verifique los datos ingresados",
+                        "Mensaje", JOptionPane.WARNING_MESSAGE);
+            }
+        }else{
             jOptionPane.showMessageDialog(
                     null, "Verifique los datos ingresados",
-                    "Error", JOptionPane.WARNING_MESSAGE);
+                    "Mensaje", JOptionPane.WARNING_MESSAGE);
         }
 
 
@@ -229,30 +238,35 @@ public class Products extends javax.swing.JFrame {
 
     private void btnModifyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnModifyMouseClicked
         int id = selectIdRow();
-        try {
+        if (id == -1) {
+            return;
+        } else {
+            try {
 
-            //Creación de objeto con los datos del producto ingresados 
-            // y llamado al metodo del servicio para agregar el producto
-            productService.modifyProduct(id,
-                    ProductDTO.builder()
-                            .name(nameInput.getText())
-                            .amount(Integer.parseInt(amountInput.getText()))
-                            .companyBrand(brandInput.getText())
-                            .build());
-            //Mensaje de creacion de creacion correcta
-            jOptionPane.showMessageDialog(
-                    null, "Producto con id '" + id
-                    + "' modificado correctamente",
-                    "Mensaje", JOptionPane.INFORMATION_MESSAGE);
-            //Actualizacion de datos
-            updateProductsTable();
+                //Creación de objeto con los datos del producto ingresados 
+                // y llamado al metodo del servicio para agregar el producto
+                productService.modifyProduct(id,
+                        ProductDTO.builder()
+                                .name(nameInput.getText())
+                                .amount(Integer.parseInt(amountInput.getText()))
+                                .companyBrand(brandInput.getText())
+                                .build());
+                //Mensaje de creacion de creacion correcta
+                jOptionPane.showMessageDialog(
+                        null, "Producto con id '" + id
+                        + "' modificado correctamente",
+                        "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+                //Actualizacion de datos
+                updateProductsTable();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            jOptionPane.showMessageDialog(
-                    null, "Verifique los datos ingresados",
-                    "Error", JOptionPane.WARNING_MESSAGE);
+            } catch (Exception e) {
+                e.printStackTrace();
+                jOptionPane.showMessageDialog(
+                        null, "Verifique los datos ingresados",
+                        "Mensaje", JOptionPane.WARNING_MESSAGE);
+            }
         }
+
 
     }//GEN-LAST:event_btnModifyMouseClicked
 
@@ -311,9 +325,6 @@ public class Products extends javax.swing.JFrame {
 
     public void showProducts(JTable tableProducts) {
         DefaultTableModel model = new DefaultTableModel();
-        // TableRowSorter<TableModel> order = new TableRowSorter<TableModel>();
-        // tableProducts.setRowSorter(order);
-
         //Columnas de la tabla
         model.addColumn("Id");
         model.addColumn("Nombre");
@@ -371,11 +382,31 @@ public class Products extends javax.swing.JFrame {
             return (int) tableProducts.getValueAt(row, 0);
         } catch (Exception e) {
             e.printStackTrace();
-            jOptionPane.showMessageDialog(
-                    null, "Error en la seleción del producto",
-                    "Mensaje", JOptionPane.WARNING_MESSAGE);
+           
         }
         return -1;
+    }
+
+    //Metodo para validar entrada de datos
+    public boolean validateInputs(String name, String amount, String brand) {
+        boolean returnMethod = false;
+
+        try {
+            //Validacion de inputs vacios
+            if (name.equals("") || amount.equals("")
+                    || brand.equals("")) {
+                returnMethod = false;
+            } //Validacion de cantidad positiva
+            else if (Integer.parseInt(amount) < 0) {
+                returnMethod = false;
+            } else {
+                returnMethod = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();  
+            returnMethod = false;
+        }
+        return returnMethod;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

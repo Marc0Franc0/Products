@@ -2,11 +2,11 @@ package com.app.model;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import lombok.*;
 
 @Entity
 public class Product implements Serializable {
@@ -14,13 +14,17 @@ public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-     @Basic
+
+    @Basic
+    @Column(unique = true,nullable = false)
     private String name;
 
     @Basic
+    @Column(nullable = false)
     private String companyBrand;
 
     @Basic
+    @Column(nullable = false)
     private int amount;
 
     public int getId() {
@@ -29,21 +33,21 @@ public class Product implements Serializable {
 
     @Override
     public String toString() {
-        return "Product{" + "id=" + id + ", name=" + name +
-                ", companyBrand=" + companyBrand + ", amount=" + amount + '}';
+        return "Product{" + "id=" + id + ", name=" + name
+                + ", companyBrand=" + companyBrand + ", amount=" + amount + '}';
     }
-    
+
     //Se utiliza para poder mapear la lista deproductosy asi mostrarlos en la tabla
-  public Object[] toArray(){
-      
-      Object[] obj = new Object[4];
-      
-      obj[0]= this.id;
-      obj[1]=this.name;
-       obj[2]=this.amount;
-       obj[3]=this.companyBrand;
-       return obj;
-  }
+    public Object[] toArray() {
+
+        Object[] obj = new Object[4];
+
+        obj[0] = this.id;
+        obj[1] = this.name;
+        obj[2] = this.amount;
+        obj[3] = this.companyBrand;
+        return obj;
+    }
 
     public Product() {
     }
@@ -55,7 +59,6 @@ public class Product implements Serializable {
         this.amount = amount;
     }
 
-  
     public String getName() {
         return name;
     }
@@ -84,6 +87,4 @@ public class Product implements Serializable {
         this.amount = amount;
     }
 
-
-  
 }
